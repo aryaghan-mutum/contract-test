@@ -5,6 +5,8 @@ import au.com.dius.pact.consumer.PactProviderRuleMk2;
 import au.com.dius.pact.consumer.PactVerification;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.model.RequestResponsePact;
+import com.contracttestpact.constants.JsonFilesConstants;
+import com.contracttestpact.utils.ReaderUtil;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.http.*;
@@ -22,6 +24,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PactMyTest {
 
+	String jsonStr = ReaderUtil.readJsonFileAsString(JsonFilesConstants.PERSON_PATH);
+
 	@Rule
 	public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("test_provider", "localhost", getAvailablePort(), this);
 
@@ -38,7 +42,7 @@ public class PactMyTest {
 				.willRespondWith()
 				.status(200)
 				.headers(headers)
-				.body("{\"condition\": true, \"name\": \"tom\"}")
+				.body(jsonStr)
 				.given("test POST")
 				.uponReceiving("POST REQUEST")
 				.method("POST")
